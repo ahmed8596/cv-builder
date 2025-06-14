@@ -1,71 +1,102 @@
-
+# Save the updated HTML content to a file
+updated_html_content = """
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <title>نموذج إنشاء سيرة ذاتية</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>إنشاء سيرتك الذاتية</h1>
-        <form>
-            <label>الوظيفة المطلوبة:</label>
-            <input type="text" name="desired_position" placeholder="مثال: مصمم جرافيك">
 
-            <label>اسمك الأول:</label>
-            <input type="text" name="first_name">
+        <!-- عنصر يتم تحويله إلى PDF -->
+        <div id="cv-content">
+            <form id="cv-form">
+                <label>الوظيفة المطلوبة:</label>
+                <input type="text" name="desired_position" placeholder="مثال: مصمم جرافيك">
 
-            <label>اسم العائلة:</label>
-            <input type="text" name="last_name">
+                <label>اسمك الأول:</label>
+                <input type="text" name="first_name">
 
-            <label>العنوان الرئيسي:</label>
-            <input type="text" name="headline">
+                <label>اسم العائلة:</label>
+                <input type="text" name="last_name">
 
-            <label>رقم الجوال:</label>
-            <input type="tel" name="phone">
+                <label>العنوان الرئيسي:</label>
+                <input type="text" name="headline">
 
-            <label>البريد الإلكتروني:</label>
-            <input type="email" name="email">
+                <label>رقم الجوال:</label>
+                <input type="tel" name="phone">
 
-            <label>المدينة:</label>
-            <select name="city">
-                <option value="الرياض">الرياض</option>
-                <option value="جدة">جدة</option>
-                <option value="الدمام">الدمام</option>
-                <option value="مكة">مكة</option>
-                <option value="المدينة">المدينة</option>
-                <option value="أخرى">أخرى</option>
-            </select>
+                <label>البريد الإلكتروني:</label>
+                <input type="email" name="email">
 
-            <label>الجنس:</label>
-            <select name="gender">
-                <option value="ذكر">ذكر</option>
-                <option value="أنثى">أنثى</option>
-            </select>
+                <label>المدينة:</label>
+                <select name="city">
+                    <option value="الرياض">الرياض</option>
+                    <option value="جدة">جدة</option>
+                    <option value="الدمام">الدمام</option>
+                    <option value="مكة">مكة</option>
+                    <option value="المدينة">المدينة</option>
+                    <option value="أخرى">أخرى</option>
+                </select>
 
-            <label>المؤهل الدراسي:</label>
-            <select name="education_level">
-                <option value="ثانوي">ثانوي</option>
-                <option value="دبلوم">دبلوم</option>
-                <option value="بكالوريوس">بكالوريوس</option>
-                <option value="ماجستير">ماجستير</option>
-                <option value="دكتوراه">دكتوراه</option>
-            </select>
+                <label>الجنس:</label>
+                <select name="gender">
+                    <option value="ذكر">ذكر</option>
+                    <option value="أنثى">أنثى</option>
+                </select>
 
-            <label>مستوى الخبرة:</label>
-            <select name="experience_level">
-                <option value="مبتدئ">مبتدئ</option>
-                <option value="متوسط">متوسط</option>
-                <option value="متقدم">متقدم</option>
-                <option value="خبير">خبير</option>
-            </select>
+                <label>المؤهل الدراسي:</label>
+                <select name="education_level">
+                    <option value="ثانوي">ثانوي</option>
+                    <option value="دبلوم">دبلوم</option>
+                    <option value="بكالوريوس">بكالوريوس</option>
+                    <option value="ماجستير">ماجستير</option>
+                    <option value="دكتوراه">دكتوراه</option>
+                </select>
 
-            <label>نبذة عنك:</label>
-            <textarea name="summary" rows="4" placeholder="اكتب نبذة مختصرة عن نفسك"></textarea>
+                <label>مستوى الخبرة:</label>
+                <select name="experience_level">
+                    <option value="مبتدئ">مبتدئ</option>
+                    <option value="متوسط">متوسط</option>
+                    <option value="متقدم">متقدم</option>
+                    <option value="خبير">خبير</option>
+                </select>
 
-            <button type="submit">تحميل السيرة الذاتية</button>
-        </form>
+                <label>نبذة عنك:</label>
+                <textarea name="summary" rows="4" placeholder="اكتب نبذة مختصرة عن نفسك"></textarea>
+            </form>
+        </div>
+
+        <!-- زر تحميل PDF -->
+        <button onclick="downloadPDF()">تحميل PDF</button>
     </div>
+
+    <script>
+        function downloadPDF() {
+            const element = document.getElementById('cv-content');
+            html2pdf()
+                .set({
+                    margin: 0.5,
+                    filename: 'cv.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+                })
+                .from(element)
+                .save();
+        }
+    </script>
 </body>
 </html>
+"""
+
+# Save the updated HTML file
+html_file_path = "/mnt/data/index.html"
+with open(html_file_path, "w", encoding="utf-8") as f:
+    f.write(updated_html_content)
+
+html_file_path

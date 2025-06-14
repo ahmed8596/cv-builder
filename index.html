@@ -1,4 +1,4 @@
-# Save the updated HTML content to a file
+# Save the updated HTML content to a file for CV Builder with PDF generation included
 updated_html_content = """
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -14,7 +14,7 @@ updated_html_content = """
 
         <!-- عنصر يتم تحويله إلى PDF -->
         <div id="cv-content">
-            <form id="cv-form">
+            <form id="cv-form" onsubmit="generatePDF(event)">
                 <label>الوظيفة المطلوبة:</label>
                 <input type="text" name="desired_position" placeholder="مثال: مصمم جرافيك">
 
@@ -68,15 +68,15 @@ updated_html_content = """
 
                 <label>نبذة عنك:</label>
                 <textarea name="summary" rows="4" placeholder="اكتب نبذة مختصرة عن نفسك"></textarea>
+
+                <button type="submit">تحميل PDF</button>
             </form>
         </div>
-
-        <!-- زر تحميل PDF -->
-        <button onclick="downloadPDF()">تحميل PDF</button>
     </div>
 
     <script>
-        function downloadPDF() {
+        function generatePDF(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
             const element = document.getElementById('cv-content');
             html2pdf()
                 .set({
